@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:todo/models/todo_model.dart';
+import 'package:todo/screens/todo_create_page.dart';
+
+// TODO
+// 1. New page for todo creation
+// 2. make the check box working
+// 3. user defined todo
 
 // This is the main function
 void main() => runApp(MyApp());
-
 
 // why is this a stateful widget, because it's state (look) changes when user taps the screen
 class MyApp extends StatefulWidget {
@@ -21,10 +26,8 @@ List<Todo> todoItems = [
   Todo("remind me", false),
 ];
 
-
 // This is how we define a stateful widget
 class _MyAppState extends State<MyApp> {
-
   // --------------------------------------------------------------
   // this function converts the todo data to a todo widget
   Container todoItemWidget(Todo todoObject) {
@@ -55,30 +58,37 @@ class _MyAppState extends State<MyApp> {
   }
   // --------------------------------------------------------------
 
-
   // build() function builds the UI
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       // here we can define the overall theme of the app
       theme: ThemeData(
-        accentColor: Colors.purpleAccent, primaryColor: Colors.purple,
+        accentColor: Colors.purpleAccent,
+        primaryColor: Colors.purple,
       ),
-      home: Scaffold(
-          appBar: AppBar(
-            title: Text("To do"),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              print("hello");
-            },
-          ),
-          body: ListView.builder(
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return todoItemWidget(todoItems[index]);
-            },
-          )),
+      home: CreateToDoPage(),
+      // home: Scaffold(
+      //   appBar: AppBar(
+      //     title: Text("To do"),
+      //   ),
+      //   floatingActionButton: FloatingActionButton(
+      //     child: Icon(Icons.add),
+      //     onPressed: () {
+      //       Navigator.push(context,
+      //           MaterialPageRoute(builder: (context) => CreateToDoPage()));
+      //       print("hello");
+      //     },
+      //   ),
+      //   body: ListView.builder(
+      //     itemCount: 5,
+      //     itemBuilder: (context, index) {
+      //       return todoItemWidget(todoItems[index]);
+      //     },
+      //   ),
+      // ),
     );
   }
 }
+
+// this is creating
