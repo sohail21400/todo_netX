@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo/models/todo_model.dart';
+import 'package:todo/services/firebase_service.dart';
 
 class CreateToDoPage extends StatefulWidget {
   @override
@@ -6,6 +8,11 @@ class CreateToDoPage extends StatefulWidget {
 }
 
 class _CreateToDoPageState extends State<CreateToDoPage> {
+  // creating an instance of class firebase service to access it's functions
+  FirebaseService _firebaseService = FirebaseService();
+  // text editign controller to store the user input
+  TextEditingController controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,12 +34,21 @@ class _CreateToDoPageState extends State<CreateToDoPage> {
                 fontSize: 27,
               ),
             ),
-            TextField(),
+            TextField(
+              controller: controller,
+            ),
             Spacer(),
             Center(
               child: RaisedButton(
                 child: Text("Done"),
-                onPressed: () {
+                onPressed: () async {
+                  showDialog(
+                      context: context, child: CircularProgressIndicator());
+                  await _firebaseService.createTodo(Todo(
+                    controller.text,
+                    false,
+                  ));
+                  Navigator.pop(context);
                   print("Button pressed");
                 },
               ),
