@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo/models/todo_model.dart';
 import 'package:todo/screens/todo_create_page.dart';
+import 'package:todo/services/firebase_service.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -8,15 +9,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-// this list holds the data of todos
-  List<Todo> todoItems = [
-    Todo("remind me", false),
-    Todo("remind me to buy milk", false),
-    Todo("take bath", true),
-    Todo("remind me", false),
-    Todo("remind me", false),
-    Todo("remind me", false),
-  ];
+  FirebaseService _firebaseService = FirebaseService();
+
+  // // this list holds the data of todos
+  // List<Todo> todoItems = [
+  //   Todo("remind me", false),
+  //   Todo("remind me to buy milk", false),
+  //   Todo("take bath", true),
+  //   Todo("remind me", false),
+  //   Todo("remind me", false),
+  //   Todo("remind me", false),
+  // ];
+
   // --------------------------------------------------------------
   // this function converts the todo data to a todo widget
   Container todoItemWidget(Todo todoObject) {
@@ -61,10 +65,21 @@ class _HomePageState extends State<HomePage> {
           print("hello");
         },
       ),
-      body: ListView.builder(
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return todoItemWidget(todoItems[index]);
+      body: FutureBuilder(
+        future: _firebaseService.getAllTodo(),
+        builder: (BuildContext context, AsyncSnapshot<List<Todo>> snapshot) {
+          var todoList = snapshot.data;
+
+          if (todoList == null) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return ListView.builder(
+              itemCount: todoList.length,
+              itemBuilder: (context, index) {
+                return todoItemWidget(todoList[index]);
+              },
+            );
+          }
         },
       ),
     );

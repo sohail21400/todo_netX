@@ -43,11 +43,22 @@ class _CreateToDoPageState extends State<CreateToDoPage> {
                 child: Text("Done"),
                 onPressed: () async {
                   showDialog(
-                      context: context, child: CircularProgressIndicator());
+                    context: context,
+                    child: Center(
+                      child: SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                  );
                   await _firebaseService.createTodo(Todo(
                     controller.text,
                     false,
                   ));
+                  // to close the dialog (loading)
+                  Navigator.pop(context);
+                  // to go to previous page
                   Navigator.pop(context);
                   print("Button pressed");
                 },
