@@ -23,29 +23,83 @@ class _HomePageState extends State<HomePage> {
 
   // --------------------------------------------------------------
   // this function converts the todo data to a todo widget
-  Container todoItemWidget(Todo todoObject) {
-    return Container(
-      // space around the container
-      margin: EdgeInsets.all(10),
-      // the parameter decoration takes Decoration, BoxDecoration is a class which extends from Decoration
-      decoration: BoxDecoration(
-        // BorderRadius extends from BorderRadiusGeometry
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.black12,
-      ),
-      // space between the container and the child of the container
-      padding: EdgeInsets.all(20),
-      child: Row(
-        children: <Widget>[
-          Text(todoObject.text),
-          Spacer(),
-          Checkbox(
-            onChanged: (value) {
-              print(value);
-            },
-            value: todoObject.isDone,
-          )
-        ],
+  Widget todoItemWidget(Todo todoObject) {
+    return GestureDetector(
+      onLongPress: () {
+        showDialog(
+            context: context,
+            child: AlertDialog(
+              title: Text("Do you want to delete?"),
+              actions: <Widget>[
+                FlatButton(
+                  onPressed: () async {
+                    showDialog(
+                      context: context,
+                      child: Center(
+                        child: SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    );
+                    // deletes the todo
+                    await _firebaseService.deleteTodo(todoObject);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+
+                    // updates the UI
+                    setState(() {});
+                  },
+                  child: Text("Yes"),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("No"),
+                ),
+              ],
+            ));
+      },
+      child: Container(
+        // space around the container
+        margin: EdgeInsets.all(10),
+        // the parameter decoration takes Decoration, BoxDecoration is a class which extends from Decoration
+        decoration: BoxDecoration(
+          // BorderRadius extends from BorderRadiusGeometry
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.black12,
+        ),
+        // space between the container and the child of the container
+        padding: EdgeInsets.all(20),
+        child: Row(
+          children: <Widget>[
+            Text(todoObject.text),
+            Spacer(),
+            Checkbox(
+              onChanged: (value) async {
+                showDialog(
+                  context: context,
+                  child: Center(
+                    child: SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                );
+                // here we need to call checkoruncheck funciton'
+                await _firebaseService.checkOrUncheckTodo(todoObject);
+                print(value);
+                // this line updates the UI/ Page
+                setState(() {});
+                Navigator.pop(context);
+              },
+              value: todoObject.isDone,
+            )
+          ],
+        ),
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Todo {
   String text;
   bool isDone;
+  String documentID;
 
   //constructor to create an instance (object) of this class
   Todo(this.text, this.isDone);
@@ -14,5 +15,6 @@ class Todo {
     var data = documentSnapshot.data;
     this.text = data["todoName"];
     this.isDone = data["isDone"];
+    this.documentID = documentSnapshot.documentID;
   }
 }

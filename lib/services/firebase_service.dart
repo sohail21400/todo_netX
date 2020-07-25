@@ -19,12 +19,26 @@ class FirebaseService {
     print("upload done");
   }
 
-  // TODO delete todo
-  deleteTodo() {}
+  deleteTodo(Todo todo) async {
+    await _firestore
+        .collection("users")
+        .document("demo")
+        .collection("user-data")
+        .document(todo.documentID)
+        .delete();
+  }
 
-  // TODO check and uncheck
-  checkOrUncheckTodo() {}
+  checkOrUncheckTodo(Todo todo) async {
+    DocumentReference todoDocumentReference = _firestore
+        .collection("users")
+        .document("demo")
+        .collection("user-data")
+        .document(todo.documentID);
 
+    await todoDocumentReference.updateData({
+      "isDone": !todo.isDone,
+    });
+  }
 
   // returns data in the form we need
   List<Todo> todoFromQuerysnapshot(QuerySnapshot snapshot) {

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/screens/home_page.dart';
 
-// TODO
-// 2. make the check box working
-// 3. 
-
 // This is the main function
 void main() => runApp(MyApp());
 
